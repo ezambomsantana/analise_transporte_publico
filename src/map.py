@@ -51,6 +51,8 @@ distritos_pop['Populacao'] = distritos_pop['Populacao'].astype(float)
 data17['NOME_O'] = data17['ZONA_O'].apply(lambda x: '' if pd.isnull(x) else mydict[x])
 data17['NOME_D'] = data17['ZONA_D'].apply(lambda x: '' if pd.isnull(x) else mydict[x])
 
+data17 = data17[data17['MOTIVO_D'].isin([1,2,3])] 
+
 def load_districts(vehicle, orde, data):
 
     if vehicle != "0":
@@ -78,10 +80,8 @@ for x in range(0, 4):
     nome = nomes[x]
 
     # Get the data about the districts, 15 is the number of the mode of the trip, bike in this case
-    teste = load_districts(tipo, "NOME_D", data17)
+    teste = load_districts(tipo, "NOME_O", data17)
     teste2 = teste.to_crs({'init': 'epsg:3857'})
-
-    print(teste2)
 
     teste2['area'] = teste2['geometry'].area / 10**6
     teste2['densidade_area'] = teste['FE_VIA'] / teste2['area']
@@ -121,7 +121,7 @@ for x in range(0, 4):
     data17_idoso = data17[data17['IDADE'] >= 60]
 
     # Get the data about the districts, 15 is the number of the mode of the trip, bike in this case
-    teste = load_districts(tipo, "NOME_D", data17_idoso)
+    teste = load_districts(tipo, "NOME_O", data17_idoso)
     teste2 = teste.to_crs({'init': 'epsg:3857'})
 
     teste2['area'] = teste2['geometry'].area / 10**6
